@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let particalArray = [];
+let adjustX = 8
+let adjustY = 0
 
 // handel mouse
 let mouse = {
@@ -16,9 +18,9 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.y
 })
 ctx.fillStyle = 'white'
-ctx.font = '40px system-ui';
-ctx.fillText('A', 0, 30);
-const textCoodinates = ctx.getImageData(0, 0, 100, 100);
+ctx.font = '12px system-ui';
+ctx.fillText("HAPPY B'DAY", 0, 30);
+let textCoodinates = ctx.getImageData(0, 0, 100, 100);
 
 class Partial {
     constructor(x, y) {
@@ -74,8 +76,8 @@ function init() {
     for (let y = 0, y2 = textCoodinates.height; y < y2; y++) {
         for (let x = 0, x2 = textCoodinates.width; x < x2; x++) {
             if(textCoodinates.data[(y * 4 * textCoodinates.width) + (x * 4) + 3] > 128) {
-                let positionX = x
-                let positionY = y
+                let positionX = x + adjustX
+                let positionY = y + adjustY
                 particalArray.push(new Partial(positionX * 20,positionY * 20))
             }
         }
@@ -92,3 +94,17 @@ function animate() {
     window.requestAnimationFrame(animate)
 }
 animate();
+
+
+document.addEventListener('keyup', (e) => {
+    if(e.target.value !== '') {
+        ctx.font = '16px system-ui';
+        ctx.fillText(e.target.value.toUpperCase(), 0, 30);
+        textCoodinates = ctx.getImageData(0, 0, 100, 100)
+    } else {
+        ctx.font = '12px system-ui';
+        ctx.fillText("HAPPY B'DAY", 0, 30);
+        textCoodinates = ctx.getImageData(0, 0, 100, 100)
+    }
+    init()
+})
