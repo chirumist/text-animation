@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let particalArray = [];
-let adjustX = 8
+let adjustX = 0
 let adjustY = 0
 
 // handel mouse
@@ -18,8 +18,8 @@ window.addEventListener('mousemove', (e) => {
     mouse.y = e.y
 })
 ctx.fillStyle = 'white'
-ctx.font = '12px system-ui';
-ctx.fillText("HAPPY B'DAY", 0, 30);
+ctx.font = '1rem system-ui';
+ctx.fillText("CHIRAG", 8, 25);
 let textCoodinates = ctx.getImageData(0, 0, 100, 100);
 
 class Partial {
@@ -91,6 +91,7 @@ function animate() {
         item.draw()
         item.update()
     })
+    connect()
     window.requestAnimationFrame(animate)
 }
 animate();
@@ -98,13 +99,31 @@ animate();
 
 document.addEventListener('keyup', (e) => {
     if(e.target.value !== '') {
-        ctx.font = '16px system-ui';
-        ctx.fillText(e.target.value.toUpperCase(), 0, 30);
+        ctx.fillText(e.target.value.toUpperCase(), 8, 25);
         textCoodinates = ctx.getImageData(0, 0, 100, 100)
     } else {
-        ctx.font = '12px system-ui';
-        ctx.fillText("HAPPY B'DAY", 0, 30);
+        ctx.fillText("CHIRAG", 8, 25);
         textCoodinates = ctx.getImageData(0, 0, 100, 100)
     }
     init()
 })
+
+function connect() {
+    let opacityValue = .3
+    for (let a = 0; a < particalArray.length; a++) {
+        for (let b = a; b < particalArray.length; b++) {
+            let dx = particalArray[a].x -  particalArray[b].x
+            let dy = particalArray[a].y -  particalArray[b].y
+            let distance = Math.sqrt(dx * dx + dy * dy)
+            // opacityValue = 1 - (distance/50)
+            ctx.strokeStyle = 'rgba(255,255,255,'+opacityValue+')'
+            if(distance < 40) {
+                ctx.lineWidth = 2
+                ctx.beginPath()
+                ctx.moveTo(particalArray[a].x,particalArray[a].y)
+                ctx.lineTo(particalArray[b].x,particalArray[b].y)
+                ctx.stroke()
+            }
+        }
+    }
+}
