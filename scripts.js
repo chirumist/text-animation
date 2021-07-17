@@ -18,7 +18,7 @@ window.addEventListener('mousemove', (e) => {
 ctx.fillStyle = 'white'
 ctx.font = '40px system-ui';
 ctx.fillText('A', 0, 30);
-const data = ctx.getImageData(0, 0, 100, 100);
+const textCoodinates = ctx.getImageData(0, 0, 100, 100);
 
 class Partial {
     constructor(x, y) {
@@ -31,7 +31,7 @@ class Partial {
     }
 
     draw() {
-        ctx.fillStyle = 'blue'
+        ctx.fillStyle = 'white'
         ctx.beginPath()
         ctx.arc(this.x, this.y,this.size, 0, Math.PI * 2)
         ctx.closePath()
@@ -64,15 +64,22 @@ class Partial {
     }
 }
 
-
 function init() {
     particalArray = []
-    for (let index = 0; index < 1000; index++) {
-        let x = Math.random() * canvas.width
-        let y = Math.random() * canvas.height
-        particalArray.push(new Partial(x,y))
+    // for (let index = 0; index < 1000; index++) {
+    //     let x = Math.random() * canvas.width
+    //     let y = Math.random() * canvas.height
+    //     particalArray.push(new Partial(x,y))
+    // }
+    for (let y = 0, y2 = textCoodinates.height; y < y2; y++) {
+        for (let x = 0, x2 = textCoodinates.width; x < x2; x++) {
+            if(textCoodinates.data[(y * 4 * textCoodinates.width) + (x * 4) + 3] > 128) {
+                let positionX = x
+                let positionY = y
+                particalArray.push(new Partial(positionX * 20,positionY * 20))
+            }
+        }
     }
-        
 }
 
 init()
